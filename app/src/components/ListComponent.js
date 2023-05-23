@@ -1,8 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ReminderScreen from '../Screens/ReminderScreen';
 
-function ListComponent({title, dt, id}) {
+function ListComponent({title, dt, id, deleteFunc, editFunc}) {
   return (
     <View
       style={{
@@ -13,7 +14,7 @@ function ListComponent({title, dt, id}) {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.d}>{dt}</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => deleteFunc(id)}>
         <Icon
           name="trash-outline"
           size={30}
@@ -21,7 +22,7 @@ function ListComponent({title, dt, id}) {
           style={{marginTop: 40}}
         />
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => editFunc(id)}>
         <Icon
           name="create-outline"
           size={30}

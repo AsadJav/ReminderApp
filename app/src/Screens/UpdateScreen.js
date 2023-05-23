@@ -15,13 +15,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-function ReminderDetailsScreen({navigation, route}) {
-  const [title, setTitle] = useState('');
+function UpdateScreen({navigation, route}) {
+  const [uptitle, setTitle] = useState(route.params.rtitle);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [dt, setDt] = useState('');
-  const [time, setTime] = useState('');
+  const [updt, setDt] = useState('Set the date');
+  const [uptime, setTime] = useState('Set the time');
   const [selectedValue, setSelectedValue] = useState('None');
 
   const onChange = (event, selectedDate) => {
@@ -55,11 +55,12 @@ function ReminderDetailsScreen({navigation, route}) {
           placeholder="Enter the Reminder Name Here"
           placeholderTextColor="white"
           onChangeText={setTitle}
-          value={title}
+          value={uptitle}
           style={{
             borderBottomColor: 'white',
             borderBottomWidth: 2,
             color: 'white',
+            fontSize: 20,
           }}
         />
         <Text style={styles.txt}>Date</Text>
@@ -74,7 +75,7 @@ function ReminderDetailsScreen({navigation, route}) {
               borderBottomWidth: 2,
               width: '90%',
             }}>
-            {dt}
+            {updt}
           </Text>
           <TouchableOpacity onPress={() => showMode('date')}>
             <Icon name="calendar-outline" size={30} color="white" />
@@ -84,14 +85,13 @@ function ReminderDetailsScreen({navigation, route}) {
         <View style={{flexDirection: 'row'}}>
           <Text
             style={{
-              // fontWeight: 'bold',
               fontSize: 16,
               color: 'white',
               borderBottomColor: 'white',
               borderBottomWidth: 2,
               width: '90%',
             }}>
-            {time}
+            {uptime}
           </Text>
 
           <TouchableOpacity onPress={() => showMode('time')}>
@@ -126,36 +126,35 @@ function ReminderDetailsScreen({navigation, route}) {
           <Picker.Item label="Other..." value="other" />
         </Picker>
         <AppButton
-          buttonName="Add Reminder"
+          buttonName="Update Reminder"
           onPress={() => {
-            if (!title.trim()) {
+            if (!uptitle.trim()) {
               Alert.alert('Please Enter the Reminder Name');
               return;
             }
-            if (!dt.trim()) {
+            if (!updt.trim()) {
               Alert.alert('Please Select the Reminder Date');
               return;
             }
-            if (!time.trim()) {
+            if (!uptime.trim()) {
               Alert.alert('Please Select the Reminder Time');
               return;
             } else {
-              let object = {
-                id: Math.floor(Math.random() * (Date.now() / 1000)),
-                title: title,
-                dt: dt + ' ' + time,
-              };
-              console.log(
-                'Please Select the Reminder11122223323',
-                route.params,
-              );
-              route.params.addData(object);
+              var indexNo = route.params.indexNo;
+              console.log(indexNo);
+              console.log('---', route?.params);
+              route?.params?.updateData(indexNo, uptitle, updt, uptime);
               navigation.goBack();
-              // navigation.navigate({
-              //   name: 'Home',
-              //   params: {heading: title, pdate: dt, ptime: time},
-              //   merge: true,
-              // });
+              // //   navigation.navigate({
+              // //     name: 'Home',
+              // //     params: {
+              // //       uptitle: uptitle,
+              // //       updt: updt,
+              // //       uptime: uptime,
+              // //       in: indexNo,
+              // //     },
+              //     merge: true,
+              //   });
             }
           }}
         />
@@ -175,4 +174,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReminderDetailsScreen;
+export default UpdateScreen;

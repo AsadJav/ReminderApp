@@ -8,11 +8,13 @@ import AppButton from './app/src/components/AppButton';
 import ReminderDetailsScreen from './app/src/Screens/ReminderDetailsScreen';
 import AppNavigation from './app/src/navigation/AppNavigation';
 import {NavigationContainer} from '@react-navigation/native';
+import UpdateScreen from './app/src/Screens/UpdateScreen';
 
 export default function App() {
   return (
     <NavigationContainer>
       <AppNavigation />
+      {/* <UpdateScreen /> */}
     </NavigationContainer>
   );
 }
