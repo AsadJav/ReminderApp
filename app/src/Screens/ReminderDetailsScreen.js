@@ -148,10 +148,7 @@ function ReminderDetailsScreen({navigation, route}) {
                   Nd: date.toDateString(),
                   d: date,
                 };
-                //console.log('---', route?.params);
-                //console.log('ID:' + object.id);
                 dispatch(updateReminder(object));
-                //route?.params?.updateData(object);
                 route.params.updateNotifications(object);
                 navigation.goBack();
               }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -16,15 +16,10 @@ import notifee, {
 import ListComponent from '../components/ListComponent';
 import AppIcon from '../components/AppIcon';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  addReminder,
-  updateReminder,
-  deleteReminder,
-} from '../Redux/ReminderSlice';
+import {deleteReminder} from '../Redux/ReminderSlice';
 
-function ReminderScreen({navigation, route}) {
+function ReminderScreen({navigation}) {
   const [refreshing, setRefreshing] = React.useState(false);
-  const [data, setData] = useState([]);
 
   const storeData = useSelector(state => state.reminders);
   const dispatch = useDispatch();
@@ -42,7 +37,6 @@ function ReminderScreen({navigation, route}) {
       timestamp: obj.d.getTime(), // fire at 11:10am (10 minutes before meeting)
     };
 
-    // Create a trigger notification
     await notifee.createTriggerNotification(
       {
         id: obj.id.toString(),
@@ -77,17 +71,6 @@ function ReminderScreen({navigation, route}) {
     notifee.cancelNotification(id.toString());
     console.log('Deleted');
   };
-  const updateFunc = obj => {
-    const updateData = [...data];
-    console.log('Updating');
-    var n = updateData[obj.indexNo].id;
-    updateData[obj.indexNo].title = obj.title;
-    updateData[obj.indexNo].date = obj.date;
-    updateData[obj.indexNo].time = obj.time;
-    updateData[obj.indexNo].Nd = obj.Nd;
-    setData(updateData);
-    onCreateTriggerNotification(updateData[obj.indexNo]);
-  };
   const editFunc = id => {
     let i = storeData.findIndex(item => item.id === id);
     console.log(i);
@@ -105,14 +88,6 @@ function ReminderScreen({navigation, route}) {
     });
   };
 
-  const addData = obj => {
-    const updateData = [...data];
-    updateData.unshift(obj);
-    setData(updateData);
-    onCreateTriggerNotification(obj);
-  };
-
-  console.log(data);
   return (
     <View style={styles.f}>
       <View style={styles.container}>
