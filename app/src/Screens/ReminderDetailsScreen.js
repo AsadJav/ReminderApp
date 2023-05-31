@@ -23,6 +23,18 @@ import {
 } from '../Redux/ReminderSlice';
 import {useSelector, useDispatch} from 'react-redux';
 
+function checkTextInput(a, b, c) {
+  if (!a.trim()) {
+    Alert.alert('Please Enter the Reminder Name');
+  } else if (!b.trim()) {
+    Alert.alert('Please Select the Reminder Date');
+  } else if (!c.trim()) {
+    Alert.alert('Please Select the Reminder Time');
+  } else {
+    return true;
+  }
+}
+
 function ReminderDetailsScreen({navigation, route}) {
   const objData = route.params.obj;
   console.log(objData);
@@ -58,9 +70,12 @@ function ReminderDetailsScreen({navigation, route}) {
   return (
     <View>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <AppIcon name="arrow-back-outline" color="white" size={30} />
-        </TouchableOpacity>
+        <AppIcon
+          name="arrow-back-outline"
+          color="white"
+          size={30}
+          onPress={() => navigation.navigate('Home')}
+        />
         <Text style={styles.txt}>What is to be done?</Text>
         <AppTextInput onChangeText={setTitle} value={title} />
         <Text style={styles.txt}>Date</Text>
@@ -71,13 +86,18 @@ function ReminderDetailsScreen({navigation, route}) {
             marginTop: -20,
             justifyContent: 'flex-end',
           }}>
-          <TouchableOpacity onPress={() => showMode('date')}>
-            <AppTextPlacer style={styles.tp1} data={dt} />
-          </TouchableOpacity>
+          <AppTextPlacer
+            style={styles.tp1}
+            data={dt}
+            onPress={() => showMode('date')}
+          />
 
-          <TouchableOpacity onPress={() => showMode('date')}>
-            <AppIcon name="calendar-outline" size={30} color="white" />
-          </TouchableOpacity>
+          <AppIcon
+            name="calendar-outline"
+            size={30}
+            color="white"
+            onPress={() => showMode('date')}
+          />
         </View>
         <AppTextBorder />
         <Text style={styles.txt}>Time</Text>
@@ -88,12 +108,18 @@ function ReminderDetailsScreen({navigation, route}) {
             marginTop: -20,
             justifyContent: 'flex-end',
           }}>
-          <TouchableOpacity onPress={() => showMode('time')}>
-            <AppTextPlacer style={styles.tp} data={time} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => showMode('time')}>
-            <AppIcon name="alarm-outline" size={30} color="white" />
-          </TouchableOpacity>
+          <AppTextPlacer
+            style={styles.tp}
+            data={time}
+            onPress={() => showMode('time')}
+          />
+
+          <AppIcon
+            name="alarm-outline"
+            size={30}
+            color="white"
+            onPress={() => showMode('time')}
+          />
         </View>
         <AppTextBorder />
         {show && (
@@ -127,18 +153,7 @@ function ReminderDetailsScreen({navigation, route}) {
           buttonName="Add Reminder"
           onPress={() => {
             if (route.params.edit == true) {
-              if (!title.trim()) {
-                Alert.alert('Please Enter the Reminder Name');
-                return;
-              }
-              if (!dt.trim()) {
-                Alert.alert('Please Select the Reminder Date');
-                return;
-              }
-              if (!time.trim()) {
-                Alert.alert('Please Select the Reminder Time');
-                return;
-              } else {
+              if (checkTextInput(title, dt, time) == true) {
                 let object = {
                   indexNo: route.params.indexNo,
                   id: route.params.id,
@@ -153,18 +168,7 @@ function ReminderDetailsScreen({navigation, route}) {
                 navigation.goBack();
               }
             } else {
-              if (!title.trim()) {
-                Alert.alert('Please Enter the Reminder Name');
-                return;
-              }
-              if (!dt.trim()) {
-                Alert.alert('Please Select the Reminder Date');
-                return;
-              }
-              if (!time.trim()) {
-                Alert.alert('Please Select the Reminder Time');
-                return;
-              } else {
+              if (checkTextInput(title, dt, time) == true) {
                 let object = {
                   id: Math.floor(Math.random() * (Date.now() / 1000)),
                   title: title,

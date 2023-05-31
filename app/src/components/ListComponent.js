@@ -18,22 +18,21 @@ function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
           <Text style={styles.d}>{time}</Text>
         </View>
       </View>
-      <TouchableOpacity onPress={() => deleteFunc(id)}>
-        <AppIcon
-          name="trash-outline"
-          size={30}
-          color="purple"
-          style={styles.dIcon}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => editFunc(id)}>
-        <AppIcon
-          name="create-outline"
-          size={30}
-          color="purple"
-          style={styles.eIcon}
-        />
-      </TouchableOpacity>
+      <AppIcon
+        name="trash-outline"
+        size={30}
+        color="purple"
+        style={styles.dIcon}
+        onPress={() => deleteFunc(id)}
+      />
+
+      <AppIcon
+        name="create-outline"
+        size={30}
+        color="purple"
+        style={styles.eIcon}
+        onPress={() => editFunc(id)}
+      />
     </View>
   );
 }

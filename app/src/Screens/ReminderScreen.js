@@ -92,20 +92,20 @@ function ReminderScreen({navigation}) {
     <View style={styles.f}>
       <View style={styles.container}>
         <Text style={styles.txt}>Reminder List</Text>
-        <TouchableOpacity
-          onPress={() =>
+
+        <AppIcon
+          name="add-circle-outline"
+          size={40}
+          color="white"
+          style={styles.icon}
+          onPress={() => {
+            console.log('Added');
             navigation.navigate('Details', {
               createNotification: onCreateTriggerNotification,
               edit: false,
-            })
-          }>
-          <AppIcon
-            name="add-circle-outline"
-            size={40}
-            color="white"
-            style={styles.icon}
-          />
-        </TouchableOpacity>
+            });
+          }}
+        />
       </View>
 
       <FlatList
