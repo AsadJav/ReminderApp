@@ -6,20 +6,64 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  LogBox,
 } from 'react-native';
-
-import Icon from 'react-native-vector-icons/Ionicons';
+import notifee, {
+  TimestampTrigger,
+  TriggerType,
+  AndroidImportance,
+} from '@notifee/react-native';
 import ListComponent from '../components/ListComponent';
+import AppIcon from '../components/AppIcon';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  addReminder,
+  updateReminder,
+  deleteReminder,
+} from '../Redux/ReminderSlice';
 
 function ReminderScreen({navigation, route}) {
   const [refreshing, setRefreshing] = React.useState(false);
-  const [title, setTitle] = useState(route.params?.heading);
-  const [date, setDate] = useState(route.params?.pdate);
-  const [time, setTime] = useState(route.params?.ptime);
-  //const [DATA, setData] = useState([]);
   const [data, setData] = useState([]);
-  //const [DATA, setMyData] = React.useState([]);
-  //console.log(route.params?.heading, route.params?.pdate, route.params?.ptime);
+
+  const storeData = useSelector(state => state.reminders);
+  const dispatch = useDispatch();
+  console.log('Data' + storeData);
+
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+    'Require cycle: appsrcScreensReminderScreen.js -> appsrccomponentsListComponent.js -> appsrcScreensReminderScreen.js',
+  ]);
+
+  async function onCreateTriggerNotification(obj) {
+    // Create a time-based trigger
+    const trigger: TimestampTrigger = {
+      type: TriggerType.TIMESTAMP,
+      timestamp: obj.d.getTime(), // fire at 11:10am (10 minutes before meeting)
+    };
+
+    // Create a trigger notification
+    await notifee.createTriggerNotification(
+      {
+        id: obj.id.toString(),
+        title: obj.title,
+        body: obj.Nd,
+        android: {
+          channelId: 'default',
+          color: '#4caf50',
+          importance: AndroidImportance.HIGH,
+          actions: [
+            {
+              title: '<b>Acknowledged!</b>',
+              pressAction: {id: 'dance'},
+            },
+          ],
+        },
+      },
+      trigger,
+    );
+    console.log('Triggered Notification');
+  }
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -27,41 +71,45 @@ function ReminderScreen({navigation, route}) {
       setRefreshing(false);
     }, 1000);
   }, []);
-  useEffect(() => {});
 
   const deleteFunc = id => {
-    const updateData = [...data];
-    for (var i = 0; i < data.length; i++) {
-      console.log(id);
-      if (data[i].id == id) {
-        updateData.splice(i, 1);
-        setData(updateData);
-        break;
-      }
-    }
+    dispatch(deleteReminder(id));
+    notifee.cancelNotification(id.toString());
+    console.log('Deleted');
   };
-  const updateFunc = (i, ntitle, ndate, ntime) => {
+  const updateFunc = obj => {
     const updateData = [...data];
     console.log('Updating');
-    updateData[i].title = ntitle;
-    updateData[i].dt = ndate + ' ' + ntime;
+    var n = updateData[obj.indexNo].id;
+    updateData[obj.indexNo].title = obj.title;
+    updateData[obj.indexNo].date = obj.date;
+    updateData[obj.indexNo].time = obj.time;
+    updateData[obj.indexNo].Nd = obj.Nd;
     setData(updateData);
+    onCreateTriggerNotification(updateData[obj.indexNo]);
   };
   const editFunc = id => {
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].id == id) {
-        navigation.navigate({
-          name: 'Update',
-          params: {rtitle: title, indexNo: i, updateData: updateFunc},
-        });
-      }
-    }
+    let i = storeData.findIndex(item => item.id === id);
+    console.log(i);
+    let obj = storeData[i];
+    console.log(obj);
+    navigation.navigate({
+      name: 'Details',
+      params: {
+        edit: true,
+        obj: obj,
+        indexNo: i,
+        id: id,
+        updateNotifications: onCreateTriggerNotification,
+      },
+    });
   };
 
   const addData = obj => {
     const updateData = [...data];
     updateData.unshift(obj);
     setData(updateData);
+    onCreateTriggerNotification(obj);
   };
 
   console.log(data);
@@ -70,22 +118,28 @@ function ReminderScreen({navigation, route}) {
       <View style={styles.container}>
         <Text style={styles.txt}>Reminder List</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Details', {addData: addData})}>
-          <Icon
+          onPress={() =>
+            navigation.navigate('Details', {
+              createNotification: onCreateTriggerNotification,
+              edit: false,
+            })
+          }>
+          <AppIcon
             name="add-circle-outline"
             size={40}
             color="white"
-            style={{marginLeft: 50, marginTop: 30}}
+            style={styles.icon}
           />
         </TouchableOpacity>
       </View>
 
       <FlatList
-        data={data}
+        data={storeData}
         renderItem={({item}) => (
           <ListComponent
             title={item.title}
-            dt={item.dt}
+            dt={item.Nd}
+            time={item.time}
             id={item.id}
             deleteFunc={deleteFunc}
             editFunc={editFunc}
@@ -113,6 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  icon: {marginLeft: 50, marginTop: 30},
   txt: {
     fontSize: 40,
     color: 'white',

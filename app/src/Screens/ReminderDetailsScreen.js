@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,19 +10,30 @@ import {
   Alert,
 } from 'react-native';
 import AppButton from '../components/AppButton';
-import ReminderScreen from './ReminderScreen';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons';
+import AppTextInput from '../components/AppTextInput';
+import AppIcon from '../components/AppIcon';
+import AppTextPlacer from '../components/AppTextPlacer';
+import AppTextBorder from '../components/AppTextBorder';
+import {
+  addReminder,
+  updateReminder,
+  deleteReminder,
+} from '../Redux/ReminderSlice';
+import {useSelector, useDispatch} from 'react-redux';
 
 function ReminderDetailsScreen({navigation, route}) {
-  const [title, setTitle] = useState('');
+  const objData = route.params.obj;
+  console.log(objData);
+  const [title, setTitle] = useState(objData?.title || '');
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [dt, setDt] = useState('');
-  const [time, setTime] = useState('');
+  const [dt, setDt] = useState(objData?.date || '');
+  const [time, setTime] = useState(objData?.time || '');
   const [selectedValue, setSelectedValue] = useState('None');
+  const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -32,9 +43,9 @@ function ReminderDetailsScreen({navigation, route}) {
     let tempDate = new Date(currentDate);
     let fDate =
       tempDate.getDate() +
-      ' / ' +
+      '-' +
       (tempDate.getMonth() + 1) +
-      ' / ' +
+      '-' +
       tempDate.getFullYear();
     let fTime = tempDate.getHours() + ':' + tempDate.getMinutes();
     setDt(fDate);
@@ -48,56 +59,43 @@ function ReminderDetailsScreen({navigation, route}) {
     <View>
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Icon name="arrow-back-outline" color="white" size={30} />
+          <AppIcon name="arrow-back-outline" color="white" size={30} />
         </TouchableOpacity>
         <Text style={styles.txt}>What is to be done?</Text>
-        <TextInput
-          placeholder="Enter the Reminder Name Here"
-          placeholderTextColor="white"
-          onChangeText={setTitle}
-          value={title}
-          style={{
-            borderBottomColor: 'white',
-            borderBottomWidth: 2,
-            color: 'white',
-          }}
-        />
+        <AppTextInput onChangeText={setTitle} value={title} />
         <Text style={styles.txt}>Date</Text>
 
-        <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
-              // fontWeight: 'bold',
-              fontSize: 16,
-              color: 'white',
-              borderBottomColor: 'white',
-              borderBottomWidth: 2,
-              width: '90%',
-            }}>
-            {dt}
-          </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: -20,
+            justifyContent: 'flex-end',
+          }}>
           <TouchableOpacity onPress={() => showMode('date')}>
-            <Icon name="calendar-outline" size={30} color="white" />
+            <AppTextPlacer style={styles.tp1} data={dt} />
           </TouchableOpacity>
-        </View>
-        <Text style={styles.txt}>Time</Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text
-            style={{
-              // fontWeight: 'bold',
-              fontSize: 16,
-              color: 'white',
-              borderBottomColor: 'white',
-              borderBottomWidth: 2,
-              width: '90%',
-            }}>
-            {time}
-          </Text>
 
-          <TouchableOpacity onPress={() => showMode('time')}>
-            <Icon name="alarm-outline" size={30} color="white" />
+          <TouchableOpacity onPress={() => showMode('date')}>
+            <AppIcon name="calendar-outline" size={30} color="white" />
           </TouchableOpacity>
         </View>
+        <AppTextBorder />
+        <Text style={styles.txt}>Time</Text>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: -20,
+            justifyContent: 'flex-end',
+          }}>
+          <TouchableOpacity onPress={() => showMode('time')}>
+            <AppTextPlacer style={styles.tp} data={time} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => showMode('time')}>
+            <AppIcon name="alarm-outline" size={30} color="white" />
+          </TouchableOpacity>
+        </View>
+        <AppTextBorder />
         {show && (
           <DateTimePicker
             testID="datetimepicker"
@@ -128,34 +126,60 @@ function ReminderDetailsScreen({navigation, route}) {
         <AppButton
           buttonName="Add Reminder"
           onPress={() => {
-            if (!title.trim()) {
-              Alert.alert('Please Enter the Reminder Name');
-              return;
-            }
-            if (!dt.trim()) {
-              Alert.alert('Please Select the Reminder Date');
-              return;
-            }
-            if (!time.trim()) {
-              Alert.alert('Please Select the Reminder Time');
-              return;
+            if (route.params.edit == true) {
+              if (!title.trim()) {
+                Alert.alert('Please Enter the Reminder Name');
+                return;
+              }
+              if (!dt.trim()) {
+                Alert.alert('Please Select the Reminder Date');
+                return;
+              }
+              if (!time.trim()) {
+                Alert.alert('Please Select the Reminder Time');
+                return;
+              } else {
+                let object = {
+                  indexNo: route.params.indexNo,
+                  id: route.params.id,
+                  title: title,
+                  date: dt,
+                  time: time,
+                  Nd: date.toDateString(),
+                  d: date,
+                };
+                //console.log('---', route?.params);
+                //console.log('ID:' + object.id);
+                dispatch(updateReminder(object));
+                //route?.params?.updateData(object);
+                route.params.updateNotifications(object);
+                navigation.goBack();
+              }
             } else {
-              let object = {
-                id: Math.floor(Math.random() * (Date.now() / 1000)),
-                title: title,
-                dt: dt + ' ' + time,
-              };
-              console.log(
-                'Please Select the Reminder11122223323',
-                route.params,
-              );
-              route.params.addData(object);
-              navigation.goBack();
-              // navigation.navigate({
-              //   name: 'Home',
-              //   params: {heading: title, pdate: dt, ptime: time},
-              //   merge: true,
-              // });
+              if (!title.trim()) {
+                Alert.alert('Please Enter the Reminder Name');
+                return;
+              }
+              if (!dt.trim()) {
+                Alert.alert('Please Select the Reminder Date');
+                return;
+              }
+              if (!time.trim()) {
+                Alert.alert('Please Select the Reminder Time');
+                return;
+              } else {
+                let object = {
+                  id: Math.floor(Math.random() * (Date.now() / 1000)),
+                  title: title,
+                  date: dt,
+                  time: time,
+                  Nd: date.toDateString(),
+                  d: date,
+                };
+                dispatch(addReminder(object));
+                route.params.createNotification(object);
+                navigation.goBack();
+              }
             }
           }}
         />
@@ -172,6 +196,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 30,
     marginBottom: 20,
+  },
+  tp: {
+    fontSize: 16,
+    color: 'white',
+    marginRight: 250,
+    width: '100%',
+  },
+  tp1: {
+    fontSize: 16,
+    color: 'white',
+    marginRight: 220,
+    width: '100%',
   },
 });
 

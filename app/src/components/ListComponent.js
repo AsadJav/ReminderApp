@@ -2,8 +2,9 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReminderScreen from '../Screens/ReminderScreen';
+import AppIcon from './AppIcon';
 
-function ListComponent({title, dt, id, deleteFunc, editFunc}) {
+function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
   return (
     <View
       style={{
@@ -12,22 +13,25 @@ function ListComponent({title, dt, id, deleteFunc, editFunc}) {
       }}>
       <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.d}>{dt}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.d}>{dt}</Text>
+          <Text style={styles.d}>{time}</Text>
+        </View>
       </View>
       <TouchableOpacity onPress={() => deleteFunc(id)}>
-        <Icon
+        <AppIcon
           name="trash-outline"
           size={30}
           color="purple"
-          style={{marginTop: 40}}
+          style={styles.dIcon}
         />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => editFunc(id)}>
-        <Icon
+        <AppIcon
           name="create-outline"
           size={30}
           color="purple"
-          style={{marginTop: 40, marginLeft: 30}}
+          style={styles.eIcon}
         />
       </TouchableOpacity>
     </View>
@@ -49,7 +53,9 @@ const styles = StyleSheet.create({
     color: 'black',
     width: '90%',
   },
-  d: {fontWeight: 'bold', marginTop: 10},
+  d: {fontWeight: 'bold', marginTop: 10, marginRight: 10},
+  dIcon: {marginTop: 40},
+  eIcon: {marginTop: 40, marginLeft: 30},
 });
 
 export default ListComponent;

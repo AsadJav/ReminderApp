@@ -1,21 +1,20 @@
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React from 'react';
-
-import DropDownPicker from 'react-native-dropdown-picker';
-
-import ReminderScreen from './app/src/Screens/ReminderScreen';
-import AppButton from './app/src/components/AppButton';
-import ReminderDetailsScreen from './app/src/Screens/ReminderDetailsScreen';
 import AppNavigation from './app/src/navigation/AppNavigation';
 import {NavigationContainer} from '@react-navigation/native';
-import UpdateScreen from './app/src/Screens/UpdateScreen';
+import {store, persistor} from './app/src/Redux/Store';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AppNavigation />
-      {/* <UpdateScreen /> */}
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <AppNavigation />
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }
 

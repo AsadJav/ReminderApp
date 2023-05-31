@@ -140,21 +140,16 @@ function UpdateScreen({navigation, route}) {
               Alert.alert('Please Select the Reminder Time');
               return;
             } else {
-              var indexNo = route.params.indexNo;
-              console.log(indexNo);
+              let object = {
+                indexNo: route.params.indexNo,
+                title: uptitle,
+                date: updt,
+                time: uptime,
+                Nd: date,
+              };
               console.log('---', route?.params);
-              route?.params?.updateData(indexNo, uptitle, updt, uptime);
+              route?.params?.updateData(object);
               navigation.goBack();
-              // //   navigation.navigate({
-              // //     name: 'Home',
-              // //     params: {
-              // //       uptitle: uptitle,
-              // //       updt: updt,
-              // //       uptime: uptime,
-              // //       in: indexNo,
-              // //     },
-              //     merge: true,
-              //   });
             }
           }}
         />
