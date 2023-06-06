@@ -11,11 +11,13 @@ function NotificationHandler(props) {
       id: 'default',
       name: 'Default Channel',
       importance: AndroidImportance.HIGH,
+      sound: 'default',
     });
 
     await notifee.displayNotification({
       title: 'Notification',
       body: '************',
+
       android: {
         channelId,
         //smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.

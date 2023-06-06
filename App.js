@@ -1,5 +1,5 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
-import React from 'react';
+import {StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
 import AppNavigation from './app/src/navigation/AppNavigation';
 import {NavigationContainer} from '@react-navigation/native';
 import {store, persistor} from './app/src/Redux/Store';
@@ -18,13 +18,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {paddingTop: 30},
-  txt: {fontWeight: 'bold', marginBottom: 10, color: 'purple'},
-  TextInput: {
-    borderColor: 'black',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderRadius: 20,
-  },
-});
+const styles = StyleSheet.create({});

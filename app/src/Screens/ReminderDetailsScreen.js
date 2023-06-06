@@ -1,14 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Platform,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, Platform, Alert} from 'react-native';
 import AppButton from '../components/AppButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
@@ -16,11 +7,7 @@ import AppTextInput from '../components/AppTextInput';
 import AppIcon from '../components/AppIcon';
 import AppTextPlacer from '../components/AppTextPlacer';
 import AppTextBorder from '../components/AppTextBorder';
-import {
-  addReminder,
-  updateReminder,
-  deleteReminder,
-} from '../Redux/ReminderSlice';
+import {addReminder, updateReminder} from '../Redux/ReminderSlice';
 import {useSelector, useDispatch} from 'react-redux';
 
 function checkTextInput(a, b, c) {
@@ -37,14 +24,13 @@ function checkTextInput(a, b, c) {
 
 function ReminderDetailsScreen({navigation, route}) {
   const objData = route.params.obj;
-  console.log(objData);
   const [title, setTitle] = useState(objData?.title || '');
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [dt, setDt] = useState(objData?.date || '');
   const [time, setTime] = useState(objData?.time || '');
-  const [selectedValue, setSelectedValue] = useState('None');
+  const [selectedValue, setSelectedValue] = useState(objData?.repeat || 'None');
   const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
@@ -101,7 +87,6 @@ function ReminderDetailsScreen({navigation, route}) {
         </View>
         <AppTextBorder />
         <Text style={styles.txt}>Time</Text>
-
         <View
           style={{
             flexDirection: 'row',
@@ -142,12 +127,10 @@ function ReminderDetailsScreen({navigation, route}) {
             color: 'white',
           }}
           onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-          <Picker.Item label="None" value="none" />
-          <Picker.Item label="Once a Day" value="once a day" />
-          <Picker.Item label="Once a Day (Mon - Fri)" value="day" />
-          <Picker.Item label="Once a Week" value="Once a Week" />
-          <Picker.Item label="Once a year" value="Once a year" />
-          <Picker.Item label="Other..." value="other" />
+          <Picker.Item label="None" value="NONE" />
+          <Picker.Item label="Hourly" value="HOURLY" />
+          <Picker.Item label="Daily" value="DAILY" />
+          <Picker.Item label="Weekly" value="WEEKLY" />
         </Picker>
         <AppButton
           buttonName="Add Reminder"
@@ -162,6 +145,7 @@ function ReminderDetailsScreen({navigation, route}) {
                   time: time,
                   Nd: date.toDateString(),
                   d: date,
+                  repeat: selectedValue,
                 };
                 dispatch(updateReminder(object));
                 route.params.updateNotifications(object);
@@ -176,6 +160,7 @@ function ReminderDetailsScreen({navigation, route}) {
                   time: time,
                   Nd: date.toDateString(),
                   d: date,
+                  repeat: selectedValue,
                 };
                 dispatch(addReminder(object));
                 route.params.createNotification(object);

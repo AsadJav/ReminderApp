@@ -12,9 +12,6 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
 
   // Check if the user pressed the "Mark as read" action
   if (type === EventType.ACTION_PRESS && pressAction.id === 'mark-as-read') {
-    // Update external API
-    console.log('Hello');
-
     // Remove the notification
     await notifee.cancelNotification(notification.id);
   }

@@ -1,17 +1,11 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  RefreshControl,
-  LogBox,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
 import notifee, {
   TimestampTrigger,
   TriggerType,
   AndroidImportance,
+  AndroidCategory,
+  RepeatFrequency,
 } from '@notifee/react-native';
 import ListComponent from '../components/ListComponent';
 import AppIcon from '../components/AppIcon';
@@ -25,31 +19,40 @@ function ReminderScreen({navigation}) {
   const dispatch = useDispatch();
   console.log('Data' + storeData);
 
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-    'Require cycle: appsrcScreensReminderScreen.js -> appsrccomponentsListComponent.js -> appsrcScreensReminderScreen.js',
-  ]);
-
   async function onCreateTriggerNotification(obj) {
     // Create a time-based trigger
     const trigger: TimestampTrigger = {
       type: TriggerType.TIMESTAMP,
       timestamp: obj.d.getTime(), // fire at 11:10am (10 minutes before meeting)
+      // repeatFrequency: RepeatFrequency.HOURLY,
     };
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+      sound: 'default',
+    });
 
     await notifee.createTriggerNotification(
       {
         id: obj.id.toString(),
         title: obj.title,
-        body: obj.Nd,
+        body: obj.Nd + ' ' + obj.time,
         android: {
-          channelId: 'default',
-          color: '#4caf50',
+          channelId,
+          color: 'purple',
+
+          category: AndroidCategory.CALL,
           importance: AndroidImportance.HIGH,
+          sound: 'default',
+          fullScreenAction: {
+            id: 'default',
+          },
+
           actions: [
             {
-              title: '<b>Acknowledged!</b>',
-              pressAction: {id: 'dance'},
+              title: '<b>Open</b>',
+              pressAction: {id: 'default'},
             },
           ],
         },
@@ -73,9 +76,7 @@ function ReminderScreen({navigation}) {
   };
   const editFunc = id => {
     let i = storeData.findIndex(item => item.id === id);
-    console.log(i);
     let obj = storeData[i];
-    console.log(obj);
     navigation.navigate({
       name: 'Details',
       params: {
@@ -99,7 +100,6 @@ function ReminderScreen({navigation}) {
           color="white"
           style={styles.icon}
           onPress={() => {
-            console.log('Added');
             navigation.navigate('Details', {
               createNotification: onCreateTriggerNotification,
               edit: false,

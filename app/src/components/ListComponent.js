@@ -1,7 +1,5 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import ReminderScreen from '../Screens/ReminderScreen';
 import AppIcon from './AppIcon';
 
 function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
