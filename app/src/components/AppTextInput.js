@@ -1,17 +1,20 @@
 import React from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {COLORS} from '../colors/color';
 
-function AppTextInput({onChangeText, value}) {
+function AppTextInput({onChangeText, value, placeholder}) {
   return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Enter the Reminder Name Here"
-        placeholderTextColor="white"
-        onChangeText={onChangeText}
-        value={value}
-        style={styles.ti}
-      />
-    </View>
+    <TextInput
+      placeholder={placeholder}
+      placeholderTextColor={COLORS.white}
+      onChangeText={onChangeText}
+      value={value}
+      style={styles.ti}
+    />
   );
 }
 

@@ -1,13 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 function AppTextPlacer({style, data, onPress}) {
   return (
-    <View>
-      <TouchableOpacity onPress={onPress}>
-        <Text style={style}>{data}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity onPress={onPress}>
+      <Text style={style}>{data}</Text>
+    </TouchableOpacity>
   );
 }
 

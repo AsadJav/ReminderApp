@@ -13,7 +13,6 @@ const AppNavigation = () => (
     initialRouteName={ReminderScreen}>
     <Stack.Screen name="Home" component={ReminderScreen} />
     <Stack.Screen name="Details" component={ReminderDetailsScreen} />
-    {/* <Stack.Screen name="Update" component={UpdateScreen} /> */}
   </Stack.Navigator>
 );
 

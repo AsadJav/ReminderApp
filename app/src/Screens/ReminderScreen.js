@@ -11,6 +11,10 @@ import ListComponent from '../components/ListComponent';
 import AppIcon from '../components/AppIcon';
 import {useSelector, useDispatch} from 'react-redux';
 import {deleteReminder} from '../Redux/ReminderSlice';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 function ReminderScreen({navigation}) {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -23,8 +27,8 @@ function ReminderScreen({navigation}) {
     // Create a time-based trigger
     const trigger: TimestampTrigger = {
       type: TriggerType.TIMESTAMP,
-      timestamp: obj.d.getTime(), // fire at 11:10am (10 minutes before meeting)
-      // repeatFrequency: RepeatFrequency.HOURLY,
+      timestamp: obj.Nd.getTime(),
+      repeatFrequency: RepeatFrequency.HOURLY,
     };
     const channelId = await notifee.createChannel({
       id: 'default',
@@ -37,7 +41,7 @@ function ReminderScreen({navigation}) {
       {
         id: obj.id.toString(),
         title: obj.title,
-        body: obj.Nd + ' ' + obj.time,
+        body: obj.date + ' ' + obj.time,
         android: {
           channelId,
           color: 'purple',
@@ -95,11 +99,11 @@ function ReminderScreen({navigation}) {
         <Text style={styles.txt}>Reminder List</Text>
 
         <AppIcon
-          name="add-circle-outline"
-          size={40}
-          color="white"
-          style={styles.icon}
-          onPress={() => {
+          IconName="add-circle-outline"
+          IconSize={40}
+          IconColor="white"
+          IconStyle={styles.icon}
+          onPressIcon={() => {
             navigation.navigate('Details', {
               createNotification: onCreateTriggerNotification,
               edit: false,
@@ -113,7 +117,7 @@ function ReminderScreen({navigation}) {
         renderItem={({item}) => (
           <ListComponent
             title={item.title}
-            dt={item.Nd}
+            dt={item.date}
             time={item.time}
             id={item.id}
             deleteFunc={deleteFunc}

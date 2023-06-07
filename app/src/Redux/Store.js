@@ -7,7 +7,6 @@ import {
 } from '@reduxjs/toolkit';
 import {persistStore, persistReducer} from 'redux-persist';
 import ReminderSlice from './ReminderSlice';
-//import storage from 'redux-persist/lib/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const isSerializable = value => Iterable.isIterable(value) || isPlain(value);

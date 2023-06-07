@@ -13,12 +13,7 @@ export const ReminderSlice = createSlice({
     updateReminder: (state, action) => {
       const updateData = action.payload;
       const indexNo = updateData.indexNo;
-      state[indexNo].title = updateData.title;
-      state[indexNo].date = updateData.date;
-      state[indexNo].time = updateData.time;
-      state[indexNo].Nd = updateData.Nd;
-      state[indexNo].d = updateData.d;
-      state[indexNo].repeat = updateData.repeat;
+      state[indexNo] = updateData;
     },
     deleteReminder: (state, action) => {
       const id = action.payload;
