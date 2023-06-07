@@ -9,14 +9,10 @@ import {COLORS} from '../colors/color';
 
 function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        backgroundColor: 'white',
-      }}>
+    <View style={styles.v1}>
       <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.v2}>
           <Text style={styles.d}>{dt}</Text>
           <Text style={styles.d}>{time}</Text>
         </View>
@@ -24,7 +20,7 @@ function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
       <AppIcon
         IconName="trash-outline"
         IconSize={30}
-        IconColor="purple"
+        IconColor={COLORS.purple}
         IconStyle={styles.dIcon}
         onPressIcon={() => deleteFunc(id)}
       />
@@ -32,7 +28,7 @@ function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
       <AppIcon
         IconName="create-outline"
         IconSize={30}
-        IconColor="purple"
+        IconColor={COLORS.purple}
         IconStyle={styles.eIcon}
         onPressIcon={() => editFunc(id)}
       />
@@ -41,23 +37,31 @@ function ListComponent({title, dt, id, deleteFunc, editFunc, time}) {
 }
 
 const styles = StyleSheet.create({
-  item: {
+  v1: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.white,
     justifyContent: 'flex-start',
-    padding: 20,
+  },
+  v2: {
+    flexDirection: 'row',
+  },
+  item: {
+    paddingTop: hp(3),
+    paddingBottom: hp(3),
     marginHorizontal: 16,
     borderBottomColor: COLORS.gray,
     borderBottomWidth: 1,
-    width: '60%',
+    width: wp(60),
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: COLORS.black,
-    width: '90%',
+    width: wp(60),
   },
-  d: {fontWeight: 'bold', marginTop: 10, marginRight: 10},
-  dIcon: {marginTop: 40},
-  eIcon: {marginTop: 40, marginLeft: 30},
+  d: {fontWeight: 'bold', marginTop: hp(2), marginRight: hp(2)},
+  dIcon: {marginTop: hp(6)},
+  eIcon: {marginTop: hp(6), marginLeft: wp(9)},
 });
 
 export default ListComponent;

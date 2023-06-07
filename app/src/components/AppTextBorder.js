@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   container: {
     borderBottomColor: COLORS.white,
     borderBottomWidth: 2,
-    width: '100%',
+    width: wp('90%'),
   },
 });
 

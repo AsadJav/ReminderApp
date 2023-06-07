@@ -9,7 +9,7 @@ import {COLORS} from '../colors/color';
 function AppButton({buttonName, onPress}) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={{color: 'purple', fontWeight: 'bold'}}>{buttonName}</Text>
+      <Text style={styles.txt}>{buttonName}</Text>
     </TouchableOpacity>
   );
 }
@@ -17,12 +17,16 @@ function AppButton({buttonName, onPress}) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.white,
-    width: '100%',
-    height: 40,
-    marginTop: 50,
+    width: wp('90%'),
+    height: hp(5),
+    marginTop: hp(9),
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 12.5,
+  },
+  txt: {
+    color: 'purple',
+    fontWeight: 'bold',
   },
 });
 

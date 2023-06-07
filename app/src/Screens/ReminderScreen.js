@@ -15,6 +15,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {COLORS} from '../colors/color';
 
 function ReminderScreen({navigation}) {
   const [refreshing, setRefreshing] = React.useState(false);
@@ -74,11 +75,13 @@ function ReminderScreen({navigation}) {
   }, []);
 
   const deleteFunc = id => {
+    console.log(id);
     dispatch(deleteReminder(id));
     notifee.cancelNotification(id.toString());
     console.log('Deleted');
   };
   const editFunc = id => {
+    console.log(id);
     let i = storeData.findIndex(item => item.id === id);
     let obj = storeData[i];
     navigation.navigate({
@@ -101,7 +104,7 @@ function ReminderScreen({navigation}) {
         <AppIcon
           IconName="add-circle-outline"
           IconSize={40}
-          IconColor="white"
+          IconColor={COLORS.white}
           IconStyle={styles.icon}
           onPressIcon={() => {
             navigation.navigate('Details', {
@@ -128,7 +131,7 @@ function ReminderScreen({navigation}) {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            progressBackgroundColor="purple"
+            progressBackgroundColor={COLORS.purple}
           />
         }
         keyExtractor={item => item.id}
@@ -142,20 +145,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    backgroundColor: 'purple',
+    backgroundColor: COLORS.purple,
     flexDirection: 'row',
     alignItems: 'center',
   },
   icon: {marginLeft: 50, marginTop: 30},
   txt: {
     fontSize: 40,
-    color: 'white',
+    color: COLORS.white,
     fontWeight: 'bold',
     marginTop: 20,
     marginLeft: 10,
   },
   item: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     borderRadius: 20,
     padding: 20,
     marginVertical: 8,

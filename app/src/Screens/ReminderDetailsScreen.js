@@ -19,10 +19,13 @@ import HorizontalComponent from '../components/HorizontalComponent';
 function checkTextInput(a, b, c) {
   if (!a.trim()) {
     Alert.alert('Please Enter the Reminder Name');
+    return false;
   } else if (!b.trim()) {
     Alert.alert('Please Select the Reminder Date');
+    return false;
   } else if (!c.trim()) {
     Alert.alert('Please Select the Reminder Time');
+    return false;
   } else {
     return true;
   }
@@ -73,22 +76,20 @@ function ReminderDetailsScreen({navigation, route}) {
         TextStyle={styles.txt}
         data={dt}
         style={styles.tp1}
-        onClicktext={() => showMode('date')}
         IconName="calendar-outline"
         IconSize={30}
         IconColor={COLORS.white}
-        onPressIcon={() => showMode('date')}
+        onPress={() => showMode('date')}
       />
       <HorizontalComponent
         heading="Time"
         TextStyle={styles.txt}
         data={time}
         style={styles.tp}
-        onClicktext={() => showMode('time')}
         IconName="alarm-outline"
         IconSize={30}
         IconColor={COLORS.white}
-        onPressIcon={() => showMode('time')}
+        onPress={() => showMode('time')}
       />
       {show && (
         <DateTimePicker
@@ -115,34 +116,31 @@ function ReminderDetailsScreen({navigation, route}) {
       <AppButton
         buttonName="Add Reminder"
         onPress={() => {
-          if (route.params.edit == true) {
-            if (checkTextInput(title, dt, time) == true) {
-              let object = {
-                indexNo: route.params.indexNo,
-                id: route.params.id,
-                title: title,
-                date: date.toDateString(),
-                time: time,
-                Nd: date,
-                repeat: selectedValue,
-              };
-              dispatch(updateReminder(object));
-              route.params.updateNotifications(object);
-              navigation.goBack();
-            }
-          } else {
-            if (checkTextInput(title, dt, time) == true) {
-              let object = {
-                id: Math.floor(Math.random() * (Date.now() / 1000)),
-                title: title,
-                date: date.toDateString(),
-                time: time,
-                Nd: date,
-                repeat: selectedValue,
-              };
-              dispatch(addReminder(object));
-              route.params.createNotification(object);
-              navigation.goBack();
+          {
+            let object = {
+              title: title,
+              date: date.toDateString(),
+              time: time,
+              Nd: date,
+              repeat: selectedValue,
+            };
+            if (route.params.edit == true) {
+              if (checkTextInput(title, dt, time) == true) {
+                let indexNo = {indexNo: route.params.indexNo};
+                let id = {id: route.params.id};
+                object = Object.assign(object, indexNo, id);
+                dispatch(updateReminder(object));
+                route.params.updateNotifications(object);
+                navigation.goBack();
+              }
+            } else {
+              if (checkTextInput(title, dt, time) == true) {
+                let id = {id: Math.floor(Math.random() * (Date.now() / 1000))};
+                object = Object.assign(object, id);
+                dispatch(addReminder(object));
+                route.params.createNotification(object);
+                navigation.goBack();
+              }
             }
           }
         }}

@@ -3,6 +3,10 @@ import {StyleSheet, View, Text} from 'react-native';
 import AppTextPlacer from './AppTextPlacer';
 import AppIcon from './AppIcon';
 import AppTextBorder from './AppTextBorder';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 function HorizontalComponent({
   data,
@@ -10,7 +14,7 @@ function HorizontalComponent({
   style,
   onClicktext,
   heading,
-  onPressIcon,
+  onPress,
   IconName,
   IconSize,
   IconColor,
@@ -20,12 +24,12 @@ function HorizontalComponent({
     <View>
       <Text style={TextStyle}>{heading}</Text>
       <View style={styles.container}>
-        <AppTextPlacer onPress={onClicktext} data={data} style={style} />
+        <AppTextPlacer onPress={onPress} data={data} style={style} />
         <AppIcon
           IconName={IconName}
           IconColor={IconColor}
           IconSize={IconSize}
-          onPressIcon={onPressIcon}
+          onPressIcon={onPress}
         />
       </View>
       <AppTextBorder />
@@ -36,7 +40,7 @@ function HorizontalComponent({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: -10,
+    marginTop: hp(0.1),
     justifyContent: 'flex-end',
   },
 });
