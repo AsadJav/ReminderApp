@@ -20,7 +20,11 @@ function AppTextInput({onChangeText, value, placeholder}) {
 
 const styles = StyleSheet.create({
   container: {},
-  ti: {borderBottomColor: 'white', borderBottomWidth: 2, color: 'white'},
+  ti: {
+    borderBottomColor: COLORS.white,
+    borderBottomWidth: 2,
+    color: COLORS.white,
+  },
 });
 
 export default AppTextInput;

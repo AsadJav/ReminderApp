@@ -1,9 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {COLORS} from '../colors/color';
 
 function AppTextBorder(props) {

@@ -22,7 +22,6 @@ function ReminderScreen({navigation}) {
 
   const storeData = useSelector(state => state.reminders);
   const dispatch = useDispatch();
-  console.log('Data' + storeData);
 
   async function onCreateTriggerNotification(obj) {
     // Create a time-based trigger
@@ -45,7 +44,7 @@ function ReminderScreen({navigation}) {
         body: obj.date + ' ' + obj.time,
         android: {
           channelId,
-          color: 'purple',
+          color: COLORS.purple,
 
           category: AndroidCategory.CALL,
           importance: AndroidImportance.HIGH,
@@ -149,20 +148,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {marginLeft: 50, marginTop: 30},
+  icon: {marginLeft: wp(12), marginTop: hp(4)},
   txt: {
     fontSize: 40,
     color: COLORS.white,
     fontWeight: 'bold',
-    marginTop: 20,
-    marginLeft: 10,
-  },
-  item: {
-    backgroundColor: COLORS.white,
-    borderRadius: 20,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    marginTop: hp(2),
+    marginLeft: wp(3),
   },
   title: {
     fontSize: 24,

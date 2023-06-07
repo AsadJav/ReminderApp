@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import AppIcon from './AppIcon';
 import {
   widthPercentageToDP as wp,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   item: {
     paddingTop: hp(3),
     paddingBottom: hp(3),
-    marginHorizontal: 16,
+    marginHorizontal: wp(4),
     borderBottomColor: COLORS.gray,
     borderBottomWidth: 1,
     width: wp(60),

@@ -3,22 +3,17 @@ import {StyleSheet, View, Text} from 'react-native';
 import AppTextPlacer from './AppTextPlacer';
 import AppIcon from './AppIcon';
 import AppTextBorder from './AppTextBorder';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 function HorizontalComponent({
   data,
   TextStyle,
   style,
-  onClicktext,
   heading,
   onPress,
   IconName,
   IconSize,
   IconColor,
-  IconStyle,
 }) {
   return (
     <View>

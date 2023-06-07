@@ -5,10 +5,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import AppTextInput from '../components/AppTextInput';
 import AppIcon from '../components/AppIcon';
-import AppTextPlacer from '../components/AppTextPlacer';
-import AppTextBorder from '../components/AppTextBorder';
 import {addReminder, updateReminder} from '../Redux/ReminderSlice';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -42,6 +40,36 @@ function ReminderDetailsScreen({navigation, route}) {
   const [selectedValue, setSelectedValue] = useState(objData?.repeat || 'None');
   const dispatch = useDispatch();
 
+  function addData(obj) {
+    obj.id = Math.floor(Math.random() * (Date.now() / 1000));
+    dispatch(addReminder(obj));
+    route.params.createNotification(obj);
+  }
+  function updateData(obj) {
+    obj.indexNo = route.params.indexNo;
+    obj.id = route.params.id;
+    dispatch(updateReminder(obj));
+    route.params.updateNotifications(obj);
+  }
+  function addUpdate() {
+    let object = {
+      title: title,
+      date: date.toDateString(),
+      time: time,
+      Nd: date,
+      repeat: selectedValue,
+    };
+
+    if (checkTextInput(title, dt, time) == true) {
+      if (route.params.edit == true) {
+        object.id = route.params.id;
+        updateData(object);
+      } else {
+        addData(object);
+      }
+      navigation.goBack();
+    }
+  }
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
@@ -116,33 +144,7 @@ function ReminderDetailsScreen({navigation, route}) {
       <AppButton
         buttonName="Add Reminder"
         onPress={() => {
-          {
-            let object = {
-              title: title,
-              date: date.toDateString(),
-              time: time,
-              Nd: date,
-              repeat: selectedValue,
-            };
-            if (route.params.edit == true) {
-              if (checkTextInput(title, dt, time) == true) {
-                let indexNo = {indexNo: route.params.indexNo};
-                let id = {id: route.params.id};
-                object = Object.assign(object, indexNo, id);
-                dispatch(updateReminder(object));
-                route.params.updateNotifications(object);
-                navigation.goBack();
-              }
-            } else {
-              if (checkTextInput(title, dt, time) == true) {
-                let id = {id: Math.floor(Math.random() * (Date.now() / 1000))};
-                object = Object.assign(object, id);
-                dispatch(addReminder(object));
-                route.params.createNotification(object);
-                navigation.goBack();
-              }
-            }
-          }
+          addUpdate();
         }}
       />
     </View>
@@ -152,33 +154,33 @@ function ReminderDetailsScreen({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: wp(5),
     backgroundColor: COLORS.purple,
-    paddingTop: 30,
+    paddingTop: wp(10),
   },
   txt: {
     fontWeight: 'bold',
     color: COLORS.white,
     fontSize: 20,
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: wp(5),
+    marginBottom: wp(5),
   },
   tp: {
     fontSize: 16,
     color: COLORS.white,
-    marginRight: 250,
-    width: '100%',
+    marginRight: wp(70),
+    //width: wp(10),
   },
   tp1: {
     fontSize: 16,
     color: COLORS.white,
-    marginRight: 170,
-    width: '100%',
+    marginRight: wp(45),
+    //width: '100%',
   },
   pick: {
-    height: 50,
-    width: '103%',
-    color: 'white',
+    height: hp(5),
+    width: wp(90),
+    color: COLORS.white,
   },
 });
 

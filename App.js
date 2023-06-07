@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import AppNavigation from './app/src/navigation/AppNavigation';
 import {NavigationContainer} from '@react-navigation/native';
 import {store, persistor} from './app/src/Redux/Store';

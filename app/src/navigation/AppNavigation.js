@@ -1,10 +1,8 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-
+import {StyleSheet} from 'react-native';
 import ReminderScreen from '../Screens/ReminderScreen';
 import ReminderDetailsScreen from '../Screens/ReminderDetailsScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import UpdateScreen from '../Screens/UpdateScreen';
 const Stack = createNativeStackNavigator();
 
 const AppNavigation = () => (

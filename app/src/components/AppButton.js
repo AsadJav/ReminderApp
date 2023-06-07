@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderRadius: 12.5,
   },
   txt: {
-    color: 'purple',
+    color: COLORS.purple,
     fontWeight: 'bold',
   },
 });
