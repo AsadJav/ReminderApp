@@ -168,13 +168,13 @@ const styles = StyleSheet.create({
   tp: {
     fontSize: 16,
     color: COLORS.white,
-    marginRight: wp(70),
+    marginRight: wp(72),
     //width: wp(10),
   },
   tp1: {
     fontSize: 16,
     color: COLORS.white,
-    marginRight: wp(45),
+    marginRight: wp(50),
     //width: '100%',
   },
   pick: {

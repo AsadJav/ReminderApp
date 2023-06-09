@@ -1,11 +1,18 @@
-import React from 'react';
-import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  RefreshControl,
+  Alert,
+} from 'react-native';
 import notifee, {
   TimestampTrigger,
   TriggerType,
+  RepeatFrequency,
   AndroidImportance,
   AndroidCategory,
-  RepeatFrequency,
 } from '@notifee/react-native';
 import ListComponent from '../components/ListComponent';
 import AppIcon from '../components/AppIcon';
@@ -16,10 +23,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {COLORS} from '../colors/color';
+import axios from 'axios';
 
 function ReminderScreen({navigation}) {
-  const [refreshing, setRefreshing] = React.useState(false);
-
+  const [refreshing, setRefreshing] = useState(false);
   const storeData = useSelector(state => state.reminders);
   const dispatch = useDispatch();
 
@@ -28,7 +35,7 @@ function ReminderScreen({navigation}) {
     const trigger: TimestampTrigger = {
       type: TriggerType.TIMESTAMP,
       timestamp: obj.Nd.getTime(),
-      repeatFrequency: RepeatFrequency.HOURLY,
+      // repeatFrequency: RepeatFrequency.HOURLY,
     };
     const channelId = await notifee.createChannel({
       id: 'default',
@@ -45,14 +52,12 @@ function ReminderScreen({navigation}) {
         android: {
           channelId,
           color: COLORS.purple,
-
-          category: AndroidCategory.CALL,
-          importance: AndroidImportance.HIGH,
           sound: 'default',
           fullScreenAction: {
             id: 'default',
           },
-
+          importance: AndroidImportance.HIGH,
+          category: AndroidCategory.REMINDER,
           actions: [
             {
               title: '<b>Open</b>',
@@ -116,6 +121,7 @@ function ReminderScreen({navigation}) {
 
       <FlatList
         data={storeData}
+        keyExtractor={item => item.id}
         renderItem={({item}) => (
           <ListComponent
             title={item.title}
@@ -133,7 +139,6 @@ function ReminderScreen({navigation}) {
             progressBackgroundColor={COLORS.purple}
           />
         }
-        keyExtractor={item => item.id}
       />
     </View>
   );
