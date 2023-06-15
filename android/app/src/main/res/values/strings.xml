@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ReminderApp</string>
+    <string name="facebook_app_id">154776674260660</string>
+    <string name="facebook_client_token">034740f6ac19b11a6fbc066ee4588dd4</string>
 </resources>

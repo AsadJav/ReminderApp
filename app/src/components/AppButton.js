@@ -6,10 +6,10 @@ import {
 } from 'react-native-responsive-screen';
 import {COLORS} from '../colors/color';
 
-function AppButton({buttonName, onPress}) {
+function AppButton({buttonName, onPress, style, color}) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={styles.txt}>{buttonName}</Text>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
+      <Text style={[styles.txt, color]}>{buttonName}</Text>
     </TouchableOpacity>
   );
 }
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderRadius: 12.5,
   },
   txt: {
-    color: COLORS.purple,
+    color: COLORS.white,
     fontWeight: 'bold',
   },
 });

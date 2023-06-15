@@ -1,12 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  RefreshControl,
-  Alert,
-} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, FlatList, RefreshControl} from 'react-native';
 import notifee, {
   TimestampTrigger,
   TriggerType,
@@ -15,7 +8,6 @@ import notifee, {
   AndroidCategory,
 } from '@notifee/react-native';
 import ListComponent from '../components/ListComponent';
-import AppIcon from '../components/AppIcon';
 import {useSelector, useDispatch} from 'react-redux';
 import {deleteReminder} from '../Redux/ReminderSlice';
 import {
@@ -23,15 +15,16 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {COLORS} from '../colors/color';
-import axios from 'axios';
+import HeaderComponent from '../components/HeaderComponent';
 
 function ReminderScreen({navigation}) {
+  console.log('Reminder Screen', userData);
   const [refreshing, setRefreshing] = useState(false);
   const storeData = useSelector(state => state.reminders);
+  const userData = useSelector(state => state.user.undefined);
+  console.log('User', userData);
   const dispatch = useDispatch();
-
   async function onCreateTriggerNotification(obj) {
-    // Create a time-based trigger
     const trigger: TimestampTrigger = {
       type: TriggerType.TIMESTAMP,
       timestamp: obj.Nd.getTime(),
@@ -91,6 +84,7 @@ function ReminderScreen({navigation}) {
     navigation.navigate({
       name: 'Details',
       params: {
+        userData: userData,
         edit: true,
         obj: obj,
         indexNo: i,
@@ -102,22 +96,23 @@ function ReminderScreen({navigation}) {
 
   return (
     <View style={styles.f}>
-      <View style={styles.container}>
-        <Text style={styles.txt}>Reminder List</Text>
-
-        <AppIcon
-          IconName="add-circle-outline"
-          IconSize={40}
-          IconColor={COLORS.white}
-          IconStyle={styles.icon}
-          onPressIcon={() => {
-            navigation.navigate('Details', {
-              createNotification: onCreateTriggerNotification,
-              edit: false,
-            });
-          }}
-        />
-      </View>
+      <HeaderComponent
+        title="Reminder List"
+        IconName1={'add-circle-outline'}
+        IconName2={'log-out-outline'}
+        onPressIcon1={() => {
+          navigation.navigate('Details', {
+            userData: userData,
+            createNotification: onCreateTriggerNotification,
+            edit: false,
+          });
+        }}
+        onPressIcon2={() => {
+          console.log('Logged Out');
+        }}
+        navigation={navigation}
+        userData={userData}
+      />
 
       <FlatList
         data={storeData}

@@ -1,25 +1,20 @@
 import React from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import {COLORS} from '../colors/color';
 
-function AppTextInput({onChangeText, value, placeholder}) {
+function AppTextInput({onChangeText, value, placeholder, style}) {
   return (
     <TextInput
       placeholder={placeholder}
       placeholderTextColor={COLORS.white}
       onChangeText={onChangeText}
       value={value}
-      style={styles.ti}
+      style={[styles.ti, style]}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
   ti: {
     borderBottomColor: COLORS.white,
     borderBottomWidth: 2,
